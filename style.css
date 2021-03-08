@@ -1,0 +1,19 @@
+#gamespace {
+  margin-left: 30%;
+}
+
+#game {
+  position:absolute;
+  top:10%;
+  left:25%;
+  z-index:0;
+  border: 2px solid black;
+}
+
+#game2 {
+  position:absolute;
+  top:10%;
+  left:25%;
+  z-index:1;
+  border: 2px solid black;
+}
