@@ -17,7 +17,7 @@ var gameArea = {
     this.canvas.height = 540;
     this.context = this.canvas.getContext("2d"); //access drawing functions from context
     this.frameNo = 0;
-    this.interval = setInterval(gameUpdate, 50); // approx 50fps-- calls gameUpdate method every 20ms
+    this.interval = setInterval(gameUpdate, 20); // approx 50fps-- calls gameUpdate method every 20ms
     this.context.fillStyle = 'white';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height); //white game background
   },
@@ -46,17 +46,19 @@ var isRaining = false;
 
 function gameUpdate()
 {
-  gameArea.clear();
+  gameArea.clear(); //erases contents of game canvas
   frame++;
-  gameArea.context.drawImage(anim1, frame * 450, 0, 450, 450, 0,0, 450,450);
+  //iterates thru frames of sprite sheet,
+  //imagine each block from the sheet being cropped and put instantly in place of the other
+  gameArea.context.drawImage(anim1, frame * 450, 0, 450, 450, 0,0, 450,450); // image, sX, sY, sW, sH, dX, dY, dW, dH
   if(frame > 9)
   {
-    frame = 0;
+    frame = 0; //loop
   }
 
   if(isRaining == true)
   {
-    rainAnim();
+    rainAnim(); //rain on hold
   }
 }
 
@@ -72,27 +74,34 @@ function rain(e)
   console.log(mouseY);
 }
 
+function rainOff(e)
+{
+  isRaining = false;
+  rainArea.clear();
+}
+
 function rainAnim()
 {
   rainArea.clear();
   if(frameX == 4)
   {
-    frameY++;
+    frameY++; //go to next row
     frameX = 0;
   }
   frameX++;
-  rainArea.context.drawImage(anim2, frameX * 450, frameY * 540, 450, 540, mouseX-100, mouseY, 225, 270);
+  rainArea.context.drawImage(anim2, frameX * 450, frameY * 540, 450, 540, mouseX-100, mouseY, 225, 270); //adjusted x to rain right from cursor
 
   if(frameY * frameX == 24)
   {
     frameY = 0;
-    frameX = 0;
-    isRaining = false;
+    frameX = 0; //back to the top
   }
   console.log("rain");
 }
 
-rainArea.canvas.addEventListener("click", rain, false);
+rainArea.canvas.addEventListener("mousedown", rain, false); //holding click
+rainArea.canvas.addEventListener("mousemove", setMousePosition, false); //moving
+rainArea.canvas.addEventListener("mouseup", rainOff, false); //letting go
 function setMousePosition(e) {
   mouseX = e.clientX - canvasPos.x;
   mouseY = e.clientY - canvasPos.y;
